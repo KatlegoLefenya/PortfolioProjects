@@ -155,3 +155,29 @@ GROUP BY date
 SELECT *
 FROM GlobalDailyNumbers
 ORDER BY 1,2,3
+
+DROP VIEW IF EXISTS DeathCountPerContinent
+CREATE VIEW DeathCountPerContinent AS
+SELECT continent, MAX(cast(total_deaths as int)) as TotalDeathCount
+FROM PortfolioProject..CovidDeaths$
+WHERE continent IS NOT NULL
+GROUP BY continent
+
+SELECT *
+FROM DeathCountPerContinent
+ORDER by TotalDeathCount DESC
+
+DROP VIEW IF EXISTS	CountriesWithHighInfectionRate
+CREATE VIEW CountriesWithHighInfectionRate AS
+SELECT location, population, MAX(total_cases) AS HighestInfectionCount, MAX((total_cases/population))*100 AS PercentagePopulationInfected
+FROM PortfolioProject..CovidDeaths$
+GROUP BY location, population
+
+SELECT *
+FROM CountriesWithHighInfectionRate
+ORDER BY PercentagePopulationInfected desc
+
+
+
+
+
